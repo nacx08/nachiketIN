@@ -1,7 +1,11 @@
-"use strict";
-import { success, failure } from "Lib";
+import { success, failure } from "./Library/response";
 
-module.exports.hello = async (event) => {
+module.exports.initialize = async (event) => {
   var Result = { message: "Message not found!!!" };
   return success(Result);
+};
+
+module.exports.errorhello = async (event) => {
+  var Result = { message: "Message not found!!!" };
+  return failure(Result);
 };

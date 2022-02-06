@@ -1,7 +1,8 @@
 org: nachiketin
 app: nachiketinbackend
 service: nachiketinbackend
-
+package:
+  individually: true
 frameworkVersion: "3"
 
 provider:
@@ -11,15 +12,21 @@ provider:
 
 plugins:
   - serverless-bundle
-  - serverless-aws-alias
-
-alias:
-  - Lib: Library
+  - serverless-offline
 
 functions:
   hello:
-    handler: handler.hello
+    handler: handler.initialize
     events:
       - http:
           path: hello
-          method: get
+          method: post
+          cors: true
+
+  helloerror:
+    handler: handler.errorhello
+    events:
+      - http:
+          path: helloerror
+          method: post
+          cors: true
