@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nacx08/nachiketIN#readme",
   "dependencies": {
+    "puppeteer": "^13.1.3",
     "serverless": "^3.1.1",
     "serverless-offline": "^8.4.0"
   },
