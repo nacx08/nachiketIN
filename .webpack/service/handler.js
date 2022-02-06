@@ -58,37 +58,6 @@ function buildResponse(statusCode, body) {
 
 /***/ }),
 
-/***/ "../../../handler.js":
-/*!***************************!*\
-  !*** ../../../handler.js ***!
-  \***************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! source-map-support/register */ "../../source-map-support/register.js");
-/* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(source_map_support_register__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Library_response__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Library/response */ "../../../Library/response.js");
-/* module decorator */ module = __webpack_require__.hmd(module);
-
-
-
-module.exports.initialize = async event => {
-  var Result = {
-    message: "Message not found!!!"
-  };
-  return (0,_Library_response__WEBPACK_IMPORTED_MODULE_1__.success)(Result);
-};
-
-module.exports.errorhello = async event => {
-  var Result = {
-    message: "Message not found!!!"
-  };
-  return (0,_Library_response__WEBPACK_IMPORTED_MODULE_1__.failure)(Result);
-};
-
-/***/ }),
-
 /***/ "../../buffer-from/index.js":
 /*!**********************************!*\
   !*** ../../buffer-from/index.js ***!
@@ -4115,21 +4084,6 @@ module.exports = require("path");
 /******/ 		};
 /******/ 	})();
 /******/ 	
-/******/ 	/* webpack/runtime/harmony module decorator */
-/******/ 	(() => {
-/******/ 		__webpack_require__.hmd = (module) => {
-/******/ 			module = Object.create(module);
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'exports', {
-/******/ 				enumerable: true,
-/******/ 				set: () => {
-/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
-/******/ 				}
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
@@ -4156,15 +4110,38 @@ module.exports = require("path");
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("../../../handler.js");
-/******/ 	var __webpack_export_target__ = exports;
-/******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
-/******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!***************************!*\
+  !*** ../../../handler.js ***!
+  \***************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! source-map-support/register */ "../../source-map-support/register.js");
+/* harmony import */ var source_map_support_register__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(source_map_support_register__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Library_response__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Library/response */ "../../../Library/response.js");
+
+
+
+exports.initialize = async event => {
+  var Result = {
+    message: "Message not found!!!"
+  };
+  return (0,_Library_response__WEBPACK_IMPORTED_MODULE_1__.success)(Result);
+};
+
+exports.errorhello = async event => {
+  var Result = {
+    message: "Message not found!!!"
+  };
+  return (0,_Library_response__WEBPACK_IMPORTED_MODULE_1__.failure)(Result);
+};
+})();
+
+var __webpack_export_target__ = exports;
+for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
 /******/ })()
 ;
 //# sourceMappingURL=handler.js.map
