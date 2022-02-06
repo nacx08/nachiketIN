@@ -1,12 +1,13 @@
-service: nachiketin
+org: nachiketin
+app: nachiketinbackend
+service: nachiketinbackend
 
-frameworkVersion: '2'
-
+frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs12.x
-  lambdaHashingVersion: '20201221'
+  lambdaHashingVersion: "20201221"
 
 functions:
   hello:
