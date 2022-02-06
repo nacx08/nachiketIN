@@ -11,7 +11,9 @@ provider:
 
 plugins:
   - serverless-bundle
-aliases:
+  - serverless-aws-alias
+
+alias:
   - Lib: Library
 
 functions:

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nacx08/nachiketIN#readme",
   "dependencies": {
+    "serverless-aws-alias": "^1.8.0",
     "serverless-bundle": "^5.2.0"
   }
 }
