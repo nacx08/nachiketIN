@@ -9,6 +9,9 @@ provider:
   runtime: nodejs12.x
   lambdaHashingVersion: "20201221"
 
+plugins:
+  - serverless-bundle
+
 aliases:
   - Lib: Library
 
@@ -17,5 +20,5 @@ functions:
     handler: handler.hello
     events:
       - http:
-          path: /
+          path: hello
           method: get
