@@ -13,7 +13,6 @@ provider:
 plugins:
   - serverless-bundle
   - serverless-offline
-
 functions:
   hello:
     handler: handler.initialize
