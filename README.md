@@ -1,2 +1,0 @@
-# nachiketIN
-Personal website
