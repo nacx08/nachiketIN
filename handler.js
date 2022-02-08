@@ -1,5 +1,5 @@
 import { success, failure } from "./Library/response";
-import obj from "/data.json";
+import obj from "./data.json";
 
 exports.initialize = async (event) => {
   console.log(obj);
