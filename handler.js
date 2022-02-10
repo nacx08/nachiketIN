@@ -1,8 +1,9 @@
 import { success, failure } from "./Library/response";
 var XLSX = require("xlsx");
+var path = require("path");
 
 exports.initialize = async (event) => {
-  var workbook = XLSX.readFile("CMVOLT_10022022.csv");
+  var workbook = XLSX.readFile(path.join(__dirname, "CMVOLT_10022022.csv"));
   var sheet_name_list = workbook.SheetNames;
   var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
   for (var i = 0; i < xlData.length; i++) {
