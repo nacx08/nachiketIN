@@ -1,9 +1,24 @@
 import { success, failure } from "./Library/response";
 var XLSX = require("xlsx");
 var path = require("path");
+const download = require("download");
+var moment = require("moment");
 
 exports.initialize = async (event) => {
-  var workbook = XLSX.readFile(path.join(__dirname, "CMVOLT_10022022.csv"));
+  // Url of the image
+  var fileName = "";
+  var dt = new Date();
+  var n = dt.getDay();
+  if (n == 0) {
+    dt = addDays(dt, -1);
+  }
+
+  dt = dt.toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+  console.log(dt);
+
+  fileName = await downloadUrl(dt);
+
+  var workbook = XLSX.readFile(__dirname + "/files/" + fileName);
   var sheet_name_list = workbook.SheetNames;
   var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
   for (var i = 0; i < xlData.length; i++) {
@@ -77,4 +92,28 @@ exports.initialize = async (event) => {
 exports.errorhello = async (event) => {
   var Result = { message: "Message not found!!!" };
   return failure(Result);
+};
+
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+const downloadUrl = async function (dt) {
+  dt = addDays(dt, -1);
+  var fileName = `CMVOLT_${moment(dt).format("DDMMYYYY")}.CSV`;
+  //const fileName = "CMVOLT_10022022.csv";
+
+  var downLoadURL = `https://www1.nseindia.com/archives/nsccl/volt/${fileName}`;
+  // Path at which image will get downloaded
+  const filePath = `${__dirname}/files`;
+  try {
+    var downloaddata = await download(downLoadURL, filePath);
+    return fileName;
+  } catch (ex) {
+    console.log(downLoadURL, ex);
+    fileName = downloadUrl(dt);
+    return fileName;
+  }
 };
