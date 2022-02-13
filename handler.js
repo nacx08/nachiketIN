@@ -18,7 +18,7 @@ exports.initialize = async (event) => {
 
   fileName = await downloadUrl(dt);
 
-  var workbook = XLSX.readFile(__dirname + "/files/" + fileName);
+  var workbook = XLSX.readFile(path.combine(__dirname, "/files/" + fileName));
   var sheet_name_list = workbook.SheetNames;
   var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
   for (var i = 0; i < xlData.length; i++) {
@@ -109,7 +109,7 @@ const downloadUrl = async function (dt) {
   // Path at which image will get downloaded
   const filePath = `${__dirname}/files`;
   try {
-    var downloaddata = await download(downLoadURL, filePath);
+    await download(downLoadURL, filePath);
     return fileName;
   } catch (ex) {
     console.log(downLoadURL, ex);
