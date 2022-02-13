@@ -1,8 +1,11 @@
 import { success, failure } from "./Library/response";
 var XLSX = require("xlsx");
 var path = require("path");
-var fs = require("fs");
 var moment = require("moment");
+const { createWriteStream } = require("fs");
+const { pipeline } = require("stream");
+const { promisify } = require("util");
+const fetch = require("node-fetch");
 
 exports.initialize = async (event) => {
   // Url of the image
@@ -109,7 +112,7 @@ const downloadUrl = async function (dt) {
   // Path at which image will get downloaded
 
   try {
-    await download(downLoadURL);
+    await download(downLoadURL, path.combine(__dirname, "/files/"));
     return fileName;
   } catch (ex) {
     console.log(downLoadURL, ex);
@@ -117,14 +120,14 @@ const downloadUrl = async function (dt) {
     return fileName;
   }
 };
+const download = async (url, filePath) => {
+  const streamPipeline = promisify(pipeline);
 
-const download = async function (url) {
-  const saveFile = await request(url);
-  const file = url.split("/")[3];
-  const download = fs.createWriteStream(path.join(__dirname, "files", file));
-  await new Promise((resolve, reject) => {
-    saveFile.data.pipe(download);
-    download.on("close", resolve);
-    download.on("error", console.error);
-  });
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`unexpected response ${response.statusText}`);
+  }
+
+  await streamPipeline(response.body, createWriteStream(filePath));
 };
