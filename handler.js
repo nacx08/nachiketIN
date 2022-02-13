@@ -1,7 +1,6 @@
 import { success, failure } from "./Library/response";
 var XLSX = require("xlsx");
 var path = require("path");
-var http = require("http");
 var fs = require("fs");
 var moment = require("moment");
 
@@ -108,9 +107,9 @@ const downloadUrl = async function (dt) {
 
   var downLoadURL = `https://www1.nseindia.com/archives/nsccl/volt/${fileName}`;
   // Path at which image will get downloaded
-  const filePath = `${__dirname}/files`;
+
   try {
-    await download(downLoadURL, filePath);
+    await download(downLoadURL);
     return fileName;
   } catch (ex) {
     console.log(downLoadURL, ex);
@@ -119,18 +118,13 @@ const downloadUrl = async function (dt) {
   }
 };
 
-const download = async function (url, dest, cb) {
-  var file = fs.createWriteStream(dest);
-  var request = http
-    .get(url, function (response) {
-      response.pipe(file);
-      file.on("finish", function () {
-        file.close(cb); // close() is async, call cb after close completes.
-      });
-    })
-    .on("error", function (err) {
-      // Handle errors
-      fs.unlink(dest); // Delete the file async. (But we don't check the result)
-      if (cb) cb(err.message);
-    });
+const download = async function (url) {
+  const saveFile = await request(url);
+  const file = url.split("/")[3];
+  const download = fs.createWriteStream(path.join(__dirname, "files", file));
+  await new Promise((resolve, reject) => {
+    saveFile.data.pipe(download);
+    download.on("close", resolve);
+    download.on("error", console.error);
+  });
 };
