@@ -90,7 +90,7 @@ exports.initialize = async (event) => {
 };
 
 exports.errorhello = async (event) => {
-  var Result = { message: "Message not found!!!" };
+  var Result = { message: "Message not found!!" };
   return failure(Result);
 };
 
