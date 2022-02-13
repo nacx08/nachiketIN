@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/nacx08/nachiketIN#readme",
   "dependencies": {
+    "axios": "^0.26.0",
     "download": "^8.0.0",
     "moment": "^2.29.1",
     "puppeteer": "^13.1.3",

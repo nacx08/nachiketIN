@@ -2,10 +2,8 @@ import { success, failure } from "./Library/response";
 var XLSX = require("xlsx");
 var path = require("path");
 var moment = require("moment");
-const { createWriteStream } = require("fs");
-const { pipeline } = require("stream");
-const { promisify } = require("util");
-const fetch = require("node-fetch");
+const fs = require("fs");
+const axios = require("axios").default;
 
 exports.initialize = async (event) => {
   // Url of the image
@@ -21,7 +19,8 @@ exports.initialize = async (event) => {
 
   fileName = await downloadUrl(dt);
 
-  var workbook = XLSX.readFile(path.combine(__dirname, "/files/" + fileName));
+  var filePathFull = __dirname + "/files/" + fileName;
+  var workbook = XLSX.readFile(filePathFull);
   var sheet_name_list = workbook.SheetNames;
   var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
   for (var i = 0; i < xlData.length; i++) {
@@ -88,7 +87,6 @@ exports.initialize = async (event) => {
   });
 
   console.log(result);
-
   return success(result);
 };
 
@@ -112,22 +110,33 @@ const downloadUrl = async function (dt) {
   // Path at which image will get downloaded
 
   try {
-    await download(downLoadURL, path.combine(__dirname, "/files/"));
+    var filePath = __dirname + "/files/";
+    await download(downLoadURL, filePath);
     return fileName;
   } catch (ex) {
-    console.log(downLoadURL, ex);
-    fileName = downloadUrl(dt);
+    fileName = await downloadUrl(dt);
     return fileName;
   }
 };
-const download = async (url, filePath) => {
-  const streamPipeline = promisify(pipeline);
 
-  const response = await fetch(url);
+const download = async (fileUrl, downloadFolder) => {
+  // Get the file name
+  const fileName = path.basename(fileUrl);
 
-  if (!response.ok) {
-    throw new Error(`unexpected response ${response.statusText}`);
+  // The path of the downloaded file on our machine
+  const localFilePath = path.resolve(__dirname, downloadFolder, fileName);
+  try {
+    const response = await axios({
+      method: "GET",
+      url: fileUrl,
+      responseType: "stream",
+    });
+
+    const w = response.data.pipe(fs.createWriteStream(localFilePath));
+    w.on("finish", () => {
+      console.log("Successfully downloaded file!");
+    });
+  } catch (err) {
+    throw new Error(err);
   }
-
-  await streamPipeline(response.body, createWriteStream(filePath));
 };
