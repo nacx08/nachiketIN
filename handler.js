@@ -121,7 +121,7 @@ const downloadUrl = async function (dt, filePathFull) {
   // Path at which image will get downloaded
   console.log(downLoadURL);
   try {
-    var filePath = path.join(__dirname, "tmp");
+    var filePath = path.join(__dirname, "files/");
     console.log(filePath);
     await download(downLoadURL, filePath);
     return fileName;
@@ -132,32 +132,6 @@ const downloadUrl = async function (dt, filePathFull) {
 };
 
 const download = async (fileUrl, downloadFolder) => {
-  var options = {
-    uri: fileUrl,
-    encoding: null,
-  };
-  request(options, function (error, response, body) {
-    if (error || response.statusCode !== 200) {
-      console.log("failed to get image");
-      console.log(error);
-    } else {
-      s3.putObject(
-        {
-          Body: body,
-          Key: path,
-          Bucket: "bucket_name",
-        },
-        function (error, data) {
-          if (error) {
-            console.log("error downloading image to s3");
-          } else {
-            console.log("success uploading to s3");
-          }
-        }
-      );
-    }
-  });
-
   const downloader = new Downloader({
     url: fileUrl, //If the file name already exists, a new file with the name 200MB1.zip is created.
     directory: downloadFolder, //This folder will be created, if it doesn't exist.
