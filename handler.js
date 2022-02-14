@@ -4,7 +4,7 @@ var path = require("path");
 var moment = require("moment");
 const fs = require("fs");
 //const Downloader = require("nodejs-file-downloader");
-
+const S3api = require("./Library/S3api");
 exports.initialize = async (event) => {
   // Url of the image
   var result = {};
@@ -132,31 +132,8 @@ const downloadUrl = async function (dt, filePathFull) {
 };
 
 const download = async (fileUrl, fileName) => {
-  var options = {
-    uri: fileUrl,
-    encoding: null,
-  };
-  request(options, function (error, response, body) {
-    if (error || response.statusCode !== 200) {
-      console.log("failed to get image");
-      console.log(error);
-    } else {
-      s3.putObject(
-        {
-          Body: body,
-          Key: fileName,
-          Bucket: process.env.AWS_BUCKET,
-        },
-        function (error, data) {
-          if (error) {
-            console.log("error downloading image to s3");
-          } else {
-            console.log("success uploading to s3");
-          }
-        }
-      );
-    }
-  });
+  var s3api = new S3api();
+  await s3api.downloadUploadData(fileUrl, fileName);
 
   // const downloader = new Downloader({
   //   url: fileUrl, //If the file name already exists, a new file with the name 200MB1.zip is created.
