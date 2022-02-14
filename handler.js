@@ -3,8 +3,8 @@ var XLSX = require("xlsx");
 var path = require("path");
 var moment = require("moment");
 const fs = require("fs");
-//const Downloader = require("nodejs-file-downloader");
-const S3api = require("./Library/S3api");
+const Downloader = require("nodejs-file-downloader");
+
 exports.initialize = async (event) => {
   // Url of the image
   var result = {};
@@ -123,7 +123,7 @@ const downloadUrl = async function (dt, filePathFull) {
   try {
     var filePath = path.join(__dirname, "tmp");
     console.log(filePath);
-    await download(downLoadURL, fileName);
+    await download(downLoadURL, filePath);
     return fileName;
   } catch (ex) {
     //fileName = await downloadUrl(dt,filePathFull);
@@ -131,21 +131,44 @@ const downloadUrl = async function (dt, filePathFull) {
   }
 };
 
-const download = async (fileUrl, fileName) => {
-  var s3api = new S3api();
-  await s3api.downloadUploadData(fileUrl, fileName);
+const download = async (fileUrl, downloadFolder) => {
+  var options = {
+    uri: fileUrl,
+    encoding: null,
+  };
+  request(options, function (error, response, body) {
+    if (error || response.statusCode !== 200) {
+      console.log("failed to get image");
+      console.log(error);
+    } else {
+      s3.putObject(
+        {
+          Body: body,
+          Key: path,
+          Bucket: "bucket_name",
+        },
+        function (error, data) {
+          if (error) {
+            console.log("error downloading image to s3");
+          } else {
+            console.log("success uploading to s3");
+          }
+        }
+      );
+    }
+  });
 
-  // const downloader = new Downloader({
-  //   url: fileUrl, //If the file name already exists, a new file with the name 200MB1.zip is created.
-  //   directory: downloadFolder, //This folder will be created, if it doesn't exist.
-  // });
-  // try {
-  //   await downloader.download(); //Downloader.download() returns a promise.
+  const downloader = new Downloader({
+    url: fileUrl, //If the file name already exists, a new file with the name 200MB1.zip is created.
+    directory: downloadFolder, //This folder will be created, if it doesn't exist.
+  });
+  try {
+    await downloader.download(); //Downloader.download() returns a promise.
 
-  //   console.log("All done");
-  // } catch (error) {
-  //   //IMPORTANT: Handle a possible error. An error is thrown in case of network errors, or status codes of 400 and above.
-  //   //Note that if the maxAttempts is set to higher than 1, the error is thrown only if all attempts fail.
-  //   console.log("Download failed", error);
-  // }
+    console.log("All done");
+  } catch (error) {
+    //IMPORTANT: Handle a possible error. An error is thrown in case of network errors, or status codes of 400 and above.
+    //Note that if the maxAttempts is set to higher than 1, the error is thrown only if all attempts fail.
+    console.log("Download failed", error);
+  }
 };

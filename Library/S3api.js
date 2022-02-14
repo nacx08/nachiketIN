@@ -178,7 +178,6 @@ class S3api {
           Body: bodyContent,
           ContentType: contentType,
         };
-
         var ReturnObjectIn = this.#_s3
           .putObject(params)
           .promise()
@@ -190,46 +189,6 @@ class S3api {
               return err;
             }
           );
-        resolve(ReturnObjectIn);
-      } catch (error) {
-        SentryTrack.trackError("error while upload Data to s3 bucket", error);
-        reject({
-          error: "Sequelize error while upload Data to s3 bucket: " + error,
-        });
-      }
-    });
-    return ReturnObject;
-  };
-
-  downloadUploadData = async (fileUrl, fileName) => {
-    var ReturnObject = new Promise(async (resolve, reject) => {
-      try {
-        var options = {
-          uri: fileUrl,
-          encoding: null,
-        };
-
-        request(options, function (error, response, body) {
-          if (error || response.statusCode !== 200) {
-            console.log("failed to get image");
-            console.log(error);
-          } else {
-            s3.putObject(
-              {
-                Body: body,
-                Key: fileName,
-                Bucket: process.env.AWS_BUCKET,
-              },
-              function (error, data) {
-                if (error) {
-                  console.log("error downloading image to s3");
-                } else {
-                  console.log("success uploading to s3");
-                }
-              }
-            );
-          }
-        });
         resolve(ReturnObjectIn);
       } catch (error) {
         SentryTrack.trackError("error while upload Data to s3 bucket", error);
@@ -266,37 +225,6 @@ class S3api {
         resolve(ReturnObjectIn);
       } catch (error) {
         console.log(error);
-        SentryTrack.trackError("error while upload Data to s3 bucket", error);
-        reject({
-          error: "Sequelize error while upload Data to s3 bucket: " + error,
-        });
-      }
-    });
-    return ReturnObject;
-  };
-
-  uploadStream = async (bodyContent) => {
-    var ReturnObject = new Promise(async (resolve, reject) => {
-      try {
-        var params = {
-          // ACL: 'public-read',
-          Bucket: this.#_bucketName,
-          Key: this.#_fileName,
-          Body: bodyContent,
-        };
-        var ReturnObjectIn = this.#_s3
-          .putObject(params)
-          .promise()
-          .then(
-            (data) => {
-              return data;
-            },
-            (err) => {
-              return err;
-            }
-          );
-        resolve(ReturnObjectIn);
-      } catch (error) {
         SentryTrack.trackError("error while upload Data to s3 bucket", error);
         reject({
           error: "Sequelize error while upload Data to s3 bucket: " + error,
