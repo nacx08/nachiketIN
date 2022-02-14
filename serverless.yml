@@ -10,9 +10,19 @@ provider:
   runtime: nodejs12.x
   lambdaHashingVersion: "20201221"
 
+  environment:
+    AWS_KEY: "${param:AWS_KEY}"
+    AWS_SECRET: "${param:AWS_SECRET}"
+    AWS_BUCKET: "${param:AWS_BUCKET}"
+    AWS_BUCKET_JSON: "${param:AWS_BUCKET_JSON}"
+
 plugins:
   - serverless-bundle
   - serverless-offline
+
+aliases:
+  - Lib: Library
+
 functions:
   hello:
     handler: handler.initialize
