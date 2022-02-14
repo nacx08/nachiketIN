@@ -19,7 +19,7 @@ exports.initialize = async (event) => {
 
   dt = dt.toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
   console.log(dt);
-  var filePathFull = path.join(__dirname, "files/", fileName);
+  var filePathFull = path.join(__dirname, "tmp", fileName);
   fileName = await downloadUrl(dt, filePathFull);
 
   filePathFull = path.join(filePathFull, fileName);
@@ -120,7 +120,7 @@ const downloadUrl = async function (dt, filePathFull) {
   // Path at which image will get downloaded
   console.log(downLoadURL);
   try {
-    var filePath = path.join(__dirname, "files/");
+    var filePath = path.join(__dirname, "tmp");
     console.log(filePath);
     await download(downLoadURL, filePath);
     return fileName;
