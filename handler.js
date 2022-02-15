@@ -6,6 +6,11 @@ const fs = require("fs");
 const Downloader = require("nodejs-file-downloader");
 
 exports.initialize = async (event) => {
+  if (event.source === "serverless-plugin-warmup") {
+    console.log("WarmUP - Lambda is warm!");
+    return success("WarmUP - Lambda is warm!");
+  }
+
   // Url of the image
   var result = {};
   var fileName = "";
